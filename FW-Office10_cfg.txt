@@ -1,0 +1,89 @@
+#----------------------------------------------------------------------------------------
+lock database override
+set hostname FW-Office10
+
+set interface eth1 auto-negotiation on
+set interface eth2 auto-negotiation on
+set interface eth1 state on
+set interface eth2 state on
+add bonding group 1
+add bonding group 1 interface eth1
+add bonding group 1 interface eth2
+add interface bond1 vlan 10
+add interface bond1 vlan 20
+add interface bond1 vlan 30
+add interface bond1 vlan 40
+add interface bond1 vlan 50
+add interface bond1 vlan 60
+add interface bond1 vlan 70
+add interface bond1 vlan 80
+add interface bond1 vlan 90
+add interface bond1 vlan 100
+set interface eth3 auto-negotiation on
+set interface eth3 state on
+
+set interface bond1.10 comments "VLAN 10"
+set interface bond1.10 state on
+set interface bond1.10 ipv4-address 10.10.1.145 mask-length 10.10.1.158
+set interface bond1.20 comments "VLAN 20"
+set interface bond1.20 state on
+set interface bond1.20 ipv4-address 10.10.2.145 mask-length 10.10.2.158
+set interface bond1.30 comments "VLAN 30"
+set interface bond1.30 state on
+set interface bond1.30 ipv4-address 10.10.3.145 mask-length 10.10.3.158
+set interface bond1.40 comments "VLAN 40"
+set interface bond1.40 state on
+set interface bond1.40 ipv4-address 10.10.4.145 mask-length 10.10.4.158
+set interface bond1.50 comments "VLAN 50"
+set interface bond1.50 state on
+set interface bond1.50 ipv4-address 10.10.5.73 mask-length 10.10.5.78
+set interface bond1.60 comments "VLAN 60"
+set interface bond1.60 state on
+set interface bond1.60 ipv4-address 10.10.6.73 mask-length 10.10.6.78
+set interface bond1.70 comments "VLAN 70"
+set interface bond1.70 state on
+set interface bond1.70 ipv4-address 10.10.7.73 mask-length 10.10.7.78
+set interface bond1.80 comments "VLAN 80"
+set interface bond1.80 state on
+set interface bond1.80 ipv4-address 10.10.8.37 mask-length 10.10.8.38
+set interface bond1.90 comments "VLAN 90"
+set interface bond1.90 state on
+set interface bond1.90 ipv4-address 10.10.9.33 mask-length 10.10.9.62
+set interface bond1.100 comments "VLAN 100"
+set interface bond1.100 state on
+set interface bond1.100 ipv4-address 10.10.10.73 mask-length 10.10.10.78
+set interface eth3.150 comments "External"
+set interface eth3.150 state on
+set interface eth3.150 ipv4-address 10.10.0.166 mask-length 30
+
+set static-route default nexthop gateway address 10.32.163.242 priority 1 on
+set static-route default nexthop gateway address 10.10.0.165 off
+
+set management interface eth3.150
+
+delete interface Mgmt ipv4-address
+set interface Mgmt state off
+
+set timezone Etc / GMT+3
+
+#----------------------------------------------------------------------------------------
+dynamic_objects -n ggr_LocalNet
+dynamic_objects -n ggr_DMZNet
+dynamic_objects -n ggr_LocalDHCP
+
+dynamic_objects -o ggr_LocalNet -r 127.0.0.1 127.0.0.1 -a
+dynamic_objects -o ggr_LocalNet -r 10.10.1.145 28 -a # VLAN 10
+dynamic_objects -o ggr_LocalNet -r 10.10.2.145 28 -a # VLAN 20
+dynamic_objects -o ggr_LocalNet -r 10.10.3.145 28 -a # VLAN 30
+dynamic_objects -o ggr_LocalNet -r 10.10.4.145 28 -a # VLAN 40
+dynamic_objects -o ggr_LocalNet -r 10.10.5.73 29 -a # VLAN 50
+
+dynamic_objects -o ggr_DMZNet -r 10.10.6.73 29 -a # VLAN 60
+dynamic_objects -o ggr_DMZNet -r 10.10.7.73 29 -a # VLAN 70
+dynamic_objects -o ggr_DMZNet -r 10.10.8.37 30 -a # VLAN 80
+dynamic_objects -o ggr_DMZNet -r 10.10.9.33 27 -a # VLAN 90
+dynamic_objects -o ggr_DMZNet -r 10.10.10.73 29 -a # VLAN 100
+
+dynamic_objects -o ggr_LocalDHCP -r 127.0.0.1 127.0.0.1 -a
+#----------------------------------------------------------------------------------------
+
